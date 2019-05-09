@@ -1,0 +1,239 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import math
+import pysam
+import getopt
+
+num = len
+
+
+def h_int(value):
+    value = str(value)
+    if value.isdigit():
+        return int(value)
+    elif value.endswith('b'):
+        return int(value)
+    elif value.endswith('k'):
+        return int(value.rstrip('k')) * 1000
+    elif value.endswith('M'):
+        return int(value.rstrip('M')) * 1000000
+    elif value.endswith('G'):
+        return int(value.rstrip('G')) * 1000000000
+    elif value.endswith('T'):
+        return int(value.rstrip('T')) * 1000000000000
+    else:
+        raise TypeError("Unsupported multiplicative suffix: %s" % value)
+
+
+
+def balance(fasta_file, bases_file, prefix_str, max_parts,
+            max_bases, len_ovlp, len_zpad, idx_init, allow_breaks):
+    BEG = 0
+    END = 1
+    AVG = 2
+    min_bases = len_ovlp if len_ovlp else 10000
+    total_bases = 0
+    mapped_bases = {}
+    contig_bases = {}
+    breaks_count = {}
+    for contig, length in zip(fasta_file.references, fasta_file.lengths):
+        contig_bases[contig] = [0, length, 1]
+        mapped_bases[contig] = 0
+        breaks_count[contig] = 0
+
+    for line in bases_file:
+        record = line.rstrip().split('\t')
+        if record[0] in mapped_bases:
+            mapped_bases[record[0]] += int(record[1])
+            contig_bases[record[0]][AVG] = mapped_bases[record[0]] / max(1,float(contig_bases[record[0]][END]))
+            total_bases += int(record[1])
+
+        elif record[0] == '*':
+            continue
+            
+        else:
+            raise ValueError("Contig ID not in fasta: %s" % record[0])
+
+    parts = []
+    if max_parts is None:
+        max_parts = int(math.ceil(total_bases / float(max_bases)))
+    else:
+        max_bases = int(math.ceil(total_bases / float(max_parts)))
+
+    parts = [None] * max_parts
+    filepat = '%%s.%%0%dd.bed' % len_zpad
+    for part_idx in range(max_parts):
+        parts[part_idx] = [0, part_idx, open(filepat % (prefix_str,idx_init+part_idx), 'w')]
+
+    # Despite pythonic style, using old-school C-style list indices
+    # is much faster than list manipulation (1 hr -> 55 sec runtime)
+    part_inc = 1
+    part_idx = 0
+    parts_sort = 0
+    contig_idx = 0
+    contigs = sorted(mapped_bases, key=mapped_bases.get, reverse=True)
+    while contig_idx < num(contigs):
+        if part_idx == max_parts:
+            part_idx = max_parts - 1
+            part_inc = -1
+        elif part_idx == -1:
+            part_idx = 0
+            part_inc = 1
+
+        contig = contigs[contig_idx]
+
+        if parts[part_idx][0] < max_bases:
+            if allow_breaks and \
+               contig_bases[contig][END] > len_ovlp and \
+               parts[part_idx][0]+mapped_bases[contig] > max_bases:
+                # break the contig into chunks and distribute into
+                # multiple bins
+                #  T                                   o===========
+                #  |                 o==================----------
+                #  o==================----------
+                #  +-----------------------------------------------
+                break_len = int(math.ceil((max_bases-parts[part_idx][0]) / contig_bases[contig][AVG]))
+                break_beg = contig_bases[contig][BEG]
+                break_end = contig_bases[contig][BEG] + break_len + len_ovlp
+                break_bas = contig_bases[contig][AVG] * break_len
+                
+                contig_bases[contig][BEG] += break_len
+                mapped_bases[contig] -= break_bas
+                
+                parts[part_idx][0] += contig_bases[contig][AVG] * break_len
+                parts[part_idx][2].write("%s\t%d\t%d\t%s.%05d\t%d\t+\n" % (
+                    contig, break_beg, min(break_end, contig_bases[contig][END]),
+                    contig, breaks_count[contig], break_bas+contig_bases[contig][AVG]*len_ovlp
+                ))
+                breaks_count[contig] += 1
+                part_idx += part_inc
+                
+                if contig_bases[contig][BEG] >= contig_bases[contig][END]:
+                    contig_idx += 1
+
+                # it would be ideal to not have to modify the size of the 
+                # list() at all
+                contigs = sorted(contigs[contig_idx:], key=mapped_bases.get, reverse=True)
+                contig_idx = 0
+
+            else:
+                parts[part_idx][0] += mapped_bases[contig]
+                parts[part_idx][2].write("%s\t%d\t%d\t%s.%05d\t%d\t+\n" % (
+                    contig, contig_bases[contig][BEG], contig_bases[contig][END],
+                    contig, breaks_count[contig], mapped_bases[contig]
+                ))
+                part_idx += part_inc
+                contig_idx += 1
+
+        elif parts_sort > max_parts:  # j.i.c. of inf loops
+            parts[part_idx][0] += mapped_bases[contig]
+            parts[part_idx][2].write("%s\t%d\t%d\t%s.%05d\t%d\t+\n" % (
+                contig, contig_bases[contig][BEG], contig_bases[contig][END],
+                contig, breaks_count[contig], mapped_bases[contig]
+            ))
+            part_idx += part_inc
+            contig_idx += 1
+
+        else:
+            parts.sort(key=lambda x: (x[0],x[1]))
+            parts_sort += 1
+            part_idx = 0
+            part_inc = 1
+
+
+    for part in sorted(parts, key=lambda x: x[1]):
+        part[2].close()
+
+
+
+def usage(message=None, status=1):
+    message = '' if message is None else '\nError: %s\n\n' % message
+    
+    sys.stderr.write("\n")
+    sys.stderr.write("Program: %s (Split a fasta file into many balanced files)\n" % (
+        os.path.basename(sys.argv[0])))
+    sys.stderr.write("Version: 0.1.0\n")
+    sys.stderr.write("Contact: Jessen Bredeson <jessenbredeson@berkeley.edu>\n")
+    sys.stderr.write("\n")
+    sys.stderr.write("Usage:   %s [options] <input.fa> <out.prefix>\n" % (
+        os.path.basename(sys.argv[0])))
+    sys.stderr.write("\n")
+    sys.stderr.write("Options: -b INT   Split input.fa into parts of INT bp [null]\n")
+    sys.stderr.write("         -p INT   Split input.fa into INT parts [10]\n")
+    sys.stderr.write("         -i INT   Initialize the output file counter with INT [1]\n")
+    sys.stderr.write("         -o INT   When breaking contigs, create INT bp of overlap [0]\n")
+    sys.stderr.write("         -z INT   Zero-pad the output file count to INT zeros wide [5]\n")
+    sys.stderr.write("         -B       Allow breaking large scaffolds into sub-parts\n")
+    sys.stderr.write("         -h       This help message\n")
+    sys.stderr.write("\n")
+    sys.stderr.write("Notes: {-b} and {-o} options recognize b, k, M, G, and T suffixes\n")
+    sys.stderr.write("\n%s" % message)
+    sys.exit(status)
+
+           
+
+def main(argv):
+    try:
+        options, arguments = getopt.getopt(argv, 'Bha:b:p:o:i:z:', ('help',))
+    except getopt.GetoptError as error:
+        usage(error)
+
+    len_zpad = 5
+    len_ovlp = 0
+    idx_init = 1
+    max_parts = None
+    max_bases = None
+    bases_name = None
+    allow_breaks = False
+    for flag, value in options:
+        if   flag in ('-h','--help'): usage()
+        elif flag == '-a': bases_name = str(value)
+        elif flag == '-p': max_parts = int(value)
+        elif flag == '-b': max_bases = h_int(value)
+        elif flag == '-i': idx_init  = int(value)
+        elif flag == '-o': len_ovlp  = h_int(value)
+        elif flag == '-z': len_zpad  = int(value)
+        elif flag == '-B': allow_breaks = True
+
+    if num(arguments) != 2:
+        usage("Unexpected number of positional arguments")
+    if len_ovlp < 0:
+        usage("Overlap length {-o} must be a non-negative integer")
+    if len_zpad < 0:
+        usage("Padding length {-z} must be a non-negative integer")
+    if idx_init < 0:
+        usage("File counter {-i} must be a non-negative integer")
+    if max_parts is not None and max_bases is not None:
+        usage("Max parts {-p} and max bases {-b} mutually exclusive")
+    if max_parts is None and max_bases is None:
+        max_parts = 10
+    if max_parts is not None and max_parts <= 0:
+        usage("Max parts {-p} must be a positive integer")
+    if max_bases is not None and max_bases <= 0:
+        usage("Max bases {-b} must be a positive integer")
+
+
+    fasta_name = arguments[0]
+    prefx_name = arguments[1]
+    fasta_file = pysam.FastaFile(fasta_name)
+    bases_file = None
+    if bases_name == '-':
+        bases_file = sys.stdin
+    elif bases_name is None:
+        bases_file = open(fasta_name+'.fai', 'r')
+    else:
+        bases_file = open(bases_name, 'r')
+
+
+
+
+    balance(fasta_file, bases_file, prefx_name, max_parts, max_bases, len_ovlp, len_zpad, idx_init, allow_breaks)
+
+    fasta_file.close()
+    bases_file.close()
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
