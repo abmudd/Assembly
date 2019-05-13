@@ -154,5 +154,5 @@ out_sh.write(genePredToProt+' -cdsFa='+args.output+'.cds.fasta '+args.output+'.g
 
 out_gff.close()
 out_sh.close()
-subprocess.call('sh '+output+'.sh',shell=True)
+subprocess.call('sh '+args.output+'.sh',shell=True)
 exit()
