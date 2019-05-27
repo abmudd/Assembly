@@ -19,18 +19,28 @@ aln100id = False
 species2_order = False
 
 for line in sys.stdin:
+    src1_extra = False
+    src2_extra = False
     line = line.rstrip().split()
     src1 = line[0].split('.')
+    if len(src1) > 2:
+        src1_extra = True
     src2 = line[4].split('.')
+    if len(src2) > 2:
+        src2_extra = True
     if src1[0] != sys.argv[2] or src2[0] != sys.argv[3]:
         sys.stderr.write('ERROR: Line is incorrectly ordered or species not found: '+' '.join(line)+'\n')
         sys.exit(2)
     if not species2_order:
         species1_chr = src1[1]
+        if src1_extra:
+            species1_chr = '.'.join(src1[1:])
         species1_strand = line[1]
         species1_start = line[2]
         species1_end = line[3]
         species2_chr = src2[1]
+        if src2_extra:
+            species2_chr = '.'.join(src2[1:])
         species2_strand = line[5]
         species2_start = line[6]
         species2_end = line[7]
@@ -48,10 +58,14 @@ for line in sys.stdin:
     else:
         sys.stdout.write(sys.argv[2]+'.'+species1_chr+'\t'+species1_strand+'\t'+species1_start+'\t'+species1_end+'\t'+sys.argv[3]+'.'+species2_chr+'\t'+species2_strand+'\t'+species2_start+'\t'+species2_end+'\t'+str(alnsize)+'\t'+str(aln100id)+'\n')
         species1_chr = src1[1]
+        if src1_extra:
+            species1_chr = '.'.join(src1[1:])
         species1_strand = line[1]
         species1_start = line[2]
         species1_end = line[3]
         species2_chr = src2[1]
+        if src2_extra:
+            species2_chr = '.'.join(src2[1:])
         species2_strand = line[5]
         species2_start = line[6]
         species2_end = line[7]
