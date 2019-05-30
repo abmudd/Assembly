@@ -179,7 +179,7 @@ if [[ ! -f ${WORKDIR}/decon_blast.done ]]; then
     # Virus
     echo "$BLASTN -evalue 0.0000000001 -query $FASTA -db $VIRUSDB -task blastn -outfmt 6 -perc_identity 95 -num_threads 15 1>${WORKDIR}/Virus_blast.out 2>${WORKDIR}/Virus_blast.log" >>${WORKDIR}/decon_blast.batch;
     #Bacteria
-    echo "$BLASTN -evalue 0.0000000001 -query $FASTA -db $BACTERIADB -task blastn -outfmt 6 -perc_identity 95 -num_threads 8 1>${WORKDIR}/Bacteria_blast.out 2>${WORKDIR}/Bacteria.${n}_blast.log"; done >>${WORKDIR}/decon_blast.batch;
+    echo "$BLASTN -evalue 0.0000000001 -query $FASTA -db $BACTERIADB -task blastn -outfmt 6 -perc_identity 95 -num_threads 15 1>${WORKDIR}/Bacteria_blast.out 2>${WORKDIR}/Bacteria.${n}_blast.log" >>${WORKDIR}/decon_blast.batch;
     $QBATCH submit -W -p 8 -t 168:0:0 ${WORKDIR}/decon_blast.batch;
 
     if [[ $(grep done ${WORKDIR}/decon_blast.batch.log/decon_blast.batch.e* | wc -l) != $(wc -l < ${WORKDIR}/decon_blast.batch) ]]; then
