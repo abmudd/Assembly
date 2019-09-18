@@ -4,7 +4,7 @@ Bash pipeline to check single haplotype, identify misjoins, and rescaffold. Inte
 
 Version 1.0
 
-Publication status: unpublished
+Citing: unpublished
 
 ## Prerequisites:
 

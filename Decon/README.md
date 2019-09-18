@@ -4,7 +4,9 @@ Bash pipelines to flag contaminant scaffolds using (1) the archaea, bacteria, an
 
 Version 1.0
 
-Publication status: unpublished
+Citing:
+* For general_decon.sh and mt_decon.sh: Mudd AB, Bredeson JV, Baum R, Hockemeyer D, and Rokhsar DS. Muntjac chromosome evolution and architecture. bioRxiv: 772343. doi: [10.1101/772343](https://doi.org/10.1101/772343)
+* For nt_decon.sh: unpublished
 
 ## Prerequisites:
 

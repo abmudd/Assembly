@@ -4,7 +4,7 @@ Python script to bin and identify regions of the genome assembly with low spanni
 
 Version 1.0
 
-Publication status: unpublished
+Citing: unpublished
 
 ## Prerequisite Python modules:
 

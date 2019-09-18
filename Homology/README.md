@@ -1,12 +1,12 @@
 # Homology scripts
 
+Version 1.0
+
+Citing: Mudd AB, Bredeson JV, Baum R, Hockemeyer D, and Rokhsar DS. Muntjac chromosome evolution and architecture. bioRxiv: 772343. doi: [10.1101/772343](https://doi.org/10.1101/772343)
+
 ## 1. 4Dextract.py
 
 Python script to extract bases with four fold degeneracy from input fasta and genePred annotation of reference species, informed by conserved amino acids in other species using input MAF alignment with the reference species on top.
-
-Version 1.0
-
-Publication status: unpublished
 
 ### Prerequisite Python modules:
 
@@ -39,10 +39,6 @@ required arguments:
 ## 2. extractOrthoVenn.py
 
 Python script to extract amino acid sequences from OrthoVenn 1-to-1 orthologs.
-
-Version 1.0
-
-Publication status: unpublished
 
 ### Prerequisite Python modules:
 

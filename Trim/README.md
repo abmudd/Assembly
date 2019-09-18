@@ -6,7 +6,7 @@ Bash pipeline to trim Nextera mate pair sequencing and separate mate pair reads 
 
 Version 1.0
 
-Publication status: unpublished
+Citing: unpublished
 
 ### Prerequisites:
 
@@ -45,7 +45,7 @@ Python script to adapter trim 10X reads and output fastq files in the expected f
 
 Version 1.0
 
-Publication status: unpublished
+Citing: Mudd AB, Bredeson JV, Baum R, Hockemeyer D, and Rokhsar DS. Muntjac chromosome evolution and architecture. bioRxiv: 772343. doi: [10.1101/772343](https://doi.org/10.1101/772343)
 
 ### Prerequisite Python modules:
 

@@ -4,7 +4,7 @@ Bash pipeline to download organelle sequences from species close to the sequence
 
 Version 1.0
 
-Publication status: unpublished
+Citing: unpublished
 
 ## Prerequisites:
 

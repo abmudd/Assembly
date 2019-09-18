@@ -4,7 +4,7 @@ Python scripts F1call.py and F2call.py extract biallelic pseudo-testcross SNPs i
 
 Version 1.0
 
-Publication status: unpublished
+Citing: unpublished
 
 ## Prerequisite Python modules:
 

@@ -4,7 +4,7 @@ Bash pipeline to align RNA-seq reads to a genome with splice junctions using STA
 
 Version 1.0
 
-Publication status: unpublished
+Citing: unpublished
 
 ## Prerequisites:
 
