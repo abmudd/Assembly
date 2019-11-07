@@ -4,7 +4,7 @@ import os, pysam, sys
 
 if len(sys.argv) != 6 or sys.argv[1] in ["-h","-help","--help"]:
     sys.stderr.write("Usage: "+os.path.basename(sys.argv[0])+" <in.orthologs> <species1> <species1.pro.aa> <species2> <species2.pro.aa>\n")
-    sys.stderr.write("This script extracts amino acid sequences from OrthoVenn 1-to-1 orthologs.\n")
+    sys.stderr.write("This script extracts amino acid sequences of 1-to-1 orthologs from OrthoVenn output and outputs an interleaved fasta file.\n")
     sys.exit(1)
 
 in_ortho = sys.stdin
@@ -24,14 +24,20 @@ with pysam.FastxFile(sys.argv[5]) as fh:
 for line in in_ortho:
     species1 = False
     species2 = False
-    for item in line.rstrip().split('\t')[2].split(' '):
+    writeout = True
+    for item in line.rstrip().split(' '):
         if item.startswith(sys.argv[2]):
-            species1 = item
+            if not species1:
+                species1 = item
+            else:
+                writeout = False
         elif item.startswith(sys.argv[4]):
-            species2 = item
-    if species1 and species2:
+            if not species2:
+                species2 = item
+            else:
+                writeout = False
+    if species1 and species2 and writeout:
         species1_split = species1.split('|')[1]
         species2_split = species2.split('|')[1]
         sys.stdout.write('>'+species1+'\n'+species1_fai[species1_split]+'\n')
         sys.stdout.write('>'+species2+'\n'+species2_fai[species2_split]+'\n')
-#        sys.stderr.write((species1_split+'\t'+species2_split).replace('N','-').replace('P','+').replace('_','\t')+'\n')

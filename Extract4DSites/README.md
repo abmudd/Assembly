@@ -23,7 +23,7 @@ sys
 ```
 usage: 4Dextract.py [-h] fasta genepred maf species
 
-extract bases with four fold degeneracy from input fasta and genePred annotation of reference species, informed by conserved amino acids in other species using input MAF alignment with the reference species on top.
+Python script to extract bases with four fold degeneracy from input fasta and genePred annotation of reference species, informed by conserved amino acids in other species using input MAF alignment with the reference species on top.
 
 optional arguments:
   -h, --help  show this help message and exit

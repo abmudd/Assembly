@@ -2,7 +2,7 @@
 
 import os, sys
 
-if len(sys.argv) != 4 or sys.argv[1] == "--help":
+if len(sys.argv) != 4 or sys.argv[1] in ["-h","-help","--help"]:
     sys.stderr.write("Usage: "+os.path.basename(sys.argv[0])+" <full.txt> <subset.txt> <column>\n")
     sys.stderr.write("Extracts line from full.txt if item in column number (base 0) is in subset.txt.\n")
     sys.exit(1)

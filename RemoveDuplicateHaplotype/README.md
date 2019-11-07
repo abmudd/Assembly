@@ -1,6 +1,6 @@
 # align_pipeline.sh
 
-Bash pipeline to check single haplotype, identify misjoins, and rescaffold. Intended for use with adapter trimmed Illumina or 10X data. Inclusion of PB data is in development and not recommended for current use.
+Bash pipeline to remove duplicate haplotypes and then rescaffold. Intended for use with adapter trimmed Illumina or 10X data.
 
 Version 1.0
 

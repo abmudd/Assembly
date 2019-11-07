@@ -89,9 +89,9 @@ function usage () {
     printf "Usage: %s --config STR --fasta STR --mode STR [--halfdepth INT]\n" `basename $0` >&2;
     printf "       [--kminusone INT] [--meraculous] [--module STR] [--workdir STR] [--help]\n" >&2;
     printf "\n" >&2;
-    printf "Pipeline to check single haplotype, identify misjoins, and rescaffold.\n" >&2;
+    printf "Pipeline to remove duplicate haplotypes and then rescaffold.\n" >&2;
     printf "Intended for use with adapter trimmed Illumina or 10X data.\n" >&2;
-    printf "Inclusion of PB data is in development and not recommended for current use.\n" >&2;
+#    printf "Inclusion of PB data is in development and not recommended for current use.\n" >&2;
     printf "\n" >&2;
     printf "Required arguments:\n" >&2;
     printf "       -c, --config STR        path for config file\n" >&2;
