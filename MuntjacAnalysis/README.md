@@ -51,7 +51,7 @@ This script assumes a standard UNIX/Linux install and access to a SGE or SLURM j
 
 ## 2. HiCbins_1Mb.py
 
-Python script that extracts number of contacts per 1 Mb bin for the M. muntjak assembly from mnd.
+Python script that extracts number of contacts per 1 Mb bin for the M. muntjak assembly from Juicer merged no dups output.
 
 ### Prerequisite Python modules:
 
@@ -65,12 +65,12 @@ sys
 
 ```
 Usage: HiCbins_1Mb.py <in.mnd>
-Python script that extracts number of contacts per 1 Mb bin for the M. muntjak assembly from Juicer merged no dups output.
+This script extracts number of contacts per 1 Mb bin for the M. muntjak assembly from Juicer merged no dups output.
 ```
 
 ## 3. HiCbins_100kb.py
 
-Python script that extracts number of contacts per 100 kb bin for the M. muntjak assembly from mnd.
+Python script that extracts number of contacts per 100 kb bin for the M. muntjak assembly from Juicer merged no dups output.
 
 ### Prerequisite Python modules:
 
@@ -84,5 +84,78 @@ sys
 
 ```
 Usage: HiCbins_1Mb.py <in.mnd>
-Python script that extracts number of contacts per 100 kb bin for the M. muntjak assembly from Juicer merged no dups output.
+This script extracts number of contacts per 100 kb bin for the M. muntjak assembly from Juicer merged no dups output.
+```
+
+## 4. extractOrthoVenn.py
+
+Python script that extracts amino acid sequences of 1-to-1 orthologs from OrthoVenn output and outputs an interleaved fasta file.
+
+### Prerequisite Python modules:
+
+```
+os
+pysam
+sys
+```
+
+### Help message:
+
+```
+Usage: extractOrthoVenn.py <in.orthologs> <species1> <species1.pro.aa> <species2> <species2.pro.aa>
+This script extracts amino acid sequences of 1-to-1 orthologs from OrthoVenn output and outputs an interleaved fasta file.
+```
+
+## 5. extract2speciesmaf.py
+
+Python script that filters maf alignments where each block contains exactly one species 1 alignment and one species 2 alignment and requires the alignment to have at least 1 base of overlap. The output is either a new pairwise MAF file or a BEDPE file.
+
+### Prerequisite Python modules:
+
+```
+os
+sys
+```
+
+### Help message:
+
+```
+Usage: extract2speciesmaf.py <in.maf> <species1> <species2> <MAF/BED>
+This script filters maf alignments where each block contains exactly one species 1 alignment and one species 2 alignment and requires the alignment to have at least 1 base of overlap. The output is either a new pairwise MAF file or a BEDPE file.
+```
+
+## 6. mcscan_convert_links.py
+
+Python script that converts the Circos links into JCVI files. Count is 1, first is A, and second is B if not provided.
+
+### Prerequisite Python modules:
+
+```
+os
+sys
+```
+
+### Help message:
+
+```
+Usage: mcscan_convert_links.py <in.circos_links> <out.prefix> <count> <first> <second>
+This script converts the Circos links into JCVI files. Count is 1, first is A, and second is B if not provided.
+```
+
+## 7. mcscan_invert_chr.py
+
+Python script that inverts the bed locations for a particular chromosome.
+
+### Prerequisite Python modules:
+
+```
+os
+sys
+```
+
+### Help message:
+
+```
+Usage: mcscan_invert_chr.py <in.bed> <in.fai> <chr_to_invert>
+This script inverts the bed locations for a particular chromosome.
 ```

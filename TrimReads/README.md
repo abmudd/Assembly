@@ -1,12 +1,14 @@
 # Read trimming scripts
 
+Version 1.0
+
+Citing:
+* For trim_10X.py: Mudd AB, Bredeson JV, Baum R, Hockemeyer D, and Rokhsar DS. Muntjac chromosome evolution and architecture. bioRxiv: 772343. doi: [10.1101/772343](https://doi.org/10.1101/772343)
+* For nxtrim_pipeline.sh: unpublished
+
 ## 1. nxtrim_pipeline.sh
 
 Bash pipeline to trim Nextera mate pair sequencing and separate mate pair reads and short insert pair end reads in the output files prefix.mp.final_1.fastq.gz, prefix.mp.final_2.fastq.gz, prefix.pe.final_1.fastq.gz, and prefix.pe.final_2.fastq.gz.
-
-Version 1.0
-
-Citing: unpublished
 
 ### Prerequisites:
 
@@ -42,10 +44,6 @@ This script assumes that the files are named prefixpath_1.fastq.gz and prefixpat
 ## 2. trim_10X.py
 
 Python script to adapter trim 10X reads and output fastq files in the expected format of programs scaff10x and break10x.
-
-Version 1.0
-
-Citing: Mudd AB, Bredeson JV, Baum R, Hockemeyer D, and Rokhsar DS. Muntjac chromosome evolution and architecture. bioRxiv: 772343. doi: [10.1101/772343](https://doi.org/10.1101/772343)
 
 ### Prerequisite Python modules:
 

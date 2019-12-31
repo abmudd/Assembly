@@ -5,12 +5,13 @@ import os, sys
 if len(sys.argv) != 5 or sys.argv[1] in ["-h","-help","--help"]:
     sys.stderr.write("Usage: "+os.path.basename(sys.argv[0])+" <in.fasta> <names.txt> <old.name.column> <new.name.column>\n")
     sys.stderr.write("This script replaces old scaffold names with new names in the names.txt files.\nColumn names should be zero-based.\n")
+    sys.stderr.write("Version: 1.0\n")
     sys.exit(1)
 
 names = {}
 
 for item in open(sys.argv[2], 'r'):
-    item = item.rstrip().split('\t')
+    item = item.rstrip().split()
     names[item[int(sys.argv[3])]] = item[int(sys.argv[4])]
 
 for line in open(sys.argv[1], 'r'):

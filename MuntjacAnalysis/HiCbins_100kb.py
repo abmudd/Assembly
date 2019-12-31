@@ -5,6 +5,7 @@ import math, os, sys
 if len(sys.argv) != 2 or sys.argv[1] in ["-h","-help","--help"]:
     sys.stderr.write("Usage: "+os.path.basename(sys.argv[0])+" <in.mnd>\n")
     sys.stderr.write("This script extracts number of contacts per 100 kb bin for the M. muntjak assembly from Juicer merged no dups output.\n")
+    sys.stderr.write("Version: 1.0\n")
     sys.exit(1)
 
 bins = []

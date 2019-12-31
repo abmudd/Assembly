@@ -5,6 +5,7 @@ import os, pysam, sys
 if len(sys.argv) != 6 or sys.argv[1] in ["-h","-help","--help"]:
     sys.stderr.write("Usage: "+os.path.basename(sys.argv[0])+" <in.orthologs> <species1> <species1.pro.aa> <species2> <species2.pro.aa>\n")
     sys.stderr.write("This script extracts amino acid sequences of 1-to-1 orthologs from OrthoVenn output and outputs an interleaved fasta file.\n")
+    sys.stderr.write("Version: 1.0\n")
     sys.exit(1)
 
 in_ortho = sys.stdin

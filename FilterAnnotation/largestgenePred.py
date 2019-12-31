@@ -5,6 +5,7 @@ import os, sys
 if len(sys.argv) != 2 or sys.argv[1] in ["-h","-help","--help"]:
     sys.stderr.write("Usage: "+os.path.basename(sys.argv[0])+" <in.genePred>\n")
     sys.stderr.write("This script extracts the largest transcript for each gene from the input genePred.\n")
+    sys.stderr.write("Version: 1.0\n")
     sys.exit(1)
 
 seen_size = {}
