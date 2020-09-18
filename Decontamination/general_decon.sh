@@ -58,6 +58,10 @@ function usage () {
     printf "      scheduling system via qbatch (see https://bitbucket.org/rokhsar-lab/gbs-analysis/src).\n" >&2;
     printf "   2. This script requires blastn, bedtools, and qbatch. These can be loaded using the\n" >&2;
     printf "      module flag, manually hard set at the top of the script, or included in the PATH.\n" >&2;
+    printf "   3. The output has the following columns: (1) Scaffold name, (2) Blast hit name, (3) Size\n" >&2;
+    printf "      of blast hit, (4) Percent of scaffold bases in blast hit, (5) Range of scaffold bases\n" >&2;
+    printf "      in blast hit, and (6) Size of scaffold. The output then lists scaffolds to remove and\n" >&2;
+    printf "      scaffolds to check.\n" >&2;
     printf "\n" >&2;
 }
 
