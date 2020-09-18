@@ -3,7 +3,7 @@
 Version 1.0
 
 Citing:
-* For postGeMoMa.py: Mudd AB, Bredeson JV, Baum R, Hockemeyer D, and Rokhsar DS. Muntjac chromosome evolution and architecture. bioRxiv: 772343. doi: [10.1101/772343](https://doi.org/10.1101/772343)
+* For postGeMoMa.py: Mudd AB, Bredeson JV, Baum R, Hockemeyer D, and Rokhsar DS (2020). Analysis of muntjac deer genome and chromatin architecture reveals rapid karyotype evolution. Communications Biology 3, 480. doi: [10.1038/s42003-020-1096-9](https://doi.org/10.1038/s42003-020-1096-9).
 * For largestgenePred.py and filter_trinity.py: unpublished
 
 
