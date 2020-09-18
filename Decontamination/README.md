@@ -58,7 +58,7 @@ Notes:
    3. The output has the following columns: (1) Scaffold name, (2) Blast hit name, (3) Size
       of blast hit, (4) Percent of scaffold bases in blast hit, (5) Range of scaffold bases
       in blast hit, and (6) Size of scaffold. The output then lists scaffolds to remove and
-      scaffolds to remove or check.
+      scaffolds to check.
 ```
 
 ## 2. mt_decon.sh
